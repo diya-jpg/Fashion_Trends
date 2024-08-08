@@ -20,16 +20,16 @@ products=await ProductCollection.find({
      }
 else if(subcategory) {
     const searchSubcategory = subcategory.toLowerCase();
-    product = await ProductCollection.find({ sub_category: { $regex: new RegExp(searchSubcategory, 'i') } });
+    products = await ProductCollection.find({ sub_category: { $regex: new RegExp(searchSubcategory, 'i') } });
 } 
 else if(id) {
     //const searchSubcategory = subcategory.toLowerCase();
-    product = await ProductCollection.find({ 
+    products = await ProductCollection.find({ 
     _id:id});
 } 
 else if(req.path.includes("/random")) {
     //const searchSubcategory = subcategory.toLowerCase();
-    product = await ProductCollection.aggregate([{ 
+    products = await ProductCollection.aggregate([{ 
     $sample:{
         size:9
     },
@@ -38,24 +38,24 @@ else if(req.path.includes("/random")) {
 } 
 else if(req.path.includes("/top-rated")) {
     //const searchSubcategory = subcategory.toLowerCase();
-    product = await ProductCollection.find().sort({rating:-1}).limit(9);
+    products = await ProductCollection.find().sort({rating:-1}).limit(9);
 } 
 else if(req.path.includes("/lowtohigh")) {
     //const searchSubcategory = subcategory.toLowerCase();
-    product = await ProductCollection.find().sort({new_price:1}).limit(5);
+    products = await ProductCollection.find().sort({new_price:1}).limit(5);
 } 
 else if(req.path.includes("/hightolow")) {
     //const searchSubcategory = subcategory.toLowerCase();
-    product = await ProductCollection.find().sort({new_price:-1}).limit(5);
+    products = await ProductCollection.find().sort({new_price:-1}).limit(5);
 } 
 else {
-    product = await ProductCollection.find();
+    products = await ProductCollection.find();
 }
 
-if (!product || product.length === 0) {
+if (!products || products.length === 0) {
     res.status(404).send({ message: "No products found" });
 } else {
-    res.status(200).send(product);
+    res.status(200).send(products);
 }
 
 console.log("Product fetched successfully");
